@@ -1,9 +1,26 @@
-#include <zephyr/dt-bindings/pinctrl/stm32-pinctrl.h>
+#include <zephyr/dt-bindings/gpio/gpio.h>
 
 / {
 	aliases {
-		led0 = &blue_led_1; 	// This is LED1 as labeled STM32WL55JC board's 
-		//led0 = &green_led_2; 	// This is LED2 as labeled STM32WL55JC board's 
-		//led0 = &red_led_3; 	// This is LED3 as labeled STM32WL55JC board's 
+		led0 = &blue_led_1;       
+		rgb-red   = &rgb_red;
+		rgb-green = &rgb_green;
+		rgb-blue  = &rgb_blue;
+	};
+
+	/* External RGB LED, COMMON ANODE (COM -> 3V3), so ACTIVE_LOW:
+	 * pin = 0 -> LED on, pin = 1 -> LED off.
+	 * Arduino header: D3 = PB3, D4 = PB5, D5 = PB8. */
+	rgb_leds {
+		compatible = "gpio-leds";
+		rgb_red: rgb_red {
+			gpios = <&gpiob 3 GPIO_ACTIVE_LOW>;
+		};
+		rgb_green: rgb_green {
+			gpios = <&gpiob 5 GPIO_ACTIVE_LOW>;
+		};
+		rgb_blue: rgb_blue {
+			gpios = <&gpiob 8 GPIO_ACTIVE_LOW>;
+		};
 	};
 };
