@@ -1,8 +1,9 @@
 #include <zephyr/dt-bindings/gpio/gpio.h>
+#include <zephyr/dt-bindings/adc/adc.h>
 
 / {
 	aliases {
-		led0 = &blue_led_1;       
+		led0 = &blue_led_1;       /* kept from blink_basic */
 		rgb-red   = &rgb_red;
 		rgb-green = &rgb_green;
 		rgb-blue  = &rgb_blue;
@@ -22,5 +23,26 @@
 		rgb_blue: rgb_blue {
 			gpios = <&gpiob 8 GPIO_ACTIVE_LOW>;
 		};
+	};
+};
+
+/* Light sensor (LDR module) on A0 = PB1 = ADC1 channel 5.
+ * The pin muxing (pinctrl) is already done by the board Devicetree. */
+/ {
+	zephyr,user {
+		io-channels = <&adc1 5>;
+	};
+};
+
+&adc1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@5 {
+		reg = <5>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
 	};
 };
