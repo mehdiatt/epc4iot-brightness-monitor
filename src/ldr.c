@@ -38,11 +38,13 @@ int ldr_read_raw(void)
 
 int ldr_raw_to_percent(int raw)
 {
-	if (raw < 0) {
-		raw = 0;
+	const int span = LDR_RAW_BRIGHT - LDR_RAW_DARK;
+
+	if (raw <= LDR_RAW_DARK) {
+		return 0;
 	}
-	if (raw > LDR_RAW_MAX) {
-		raw = LDR_RAW_MAX;
+	if (raw >= LDR_RAW_BRIGHT) {
+		return 100;
 	}
-	return (raw * 100) / LDR_RAW_MAX;
+	return ((raw - LDR_RAW_DARK) * 100) / span;
 }
