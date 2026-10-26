@@ -41,6 +41,31 @@ we would only change this flag.
 The board buttons already have a hardware debounce circuit, so we do not debounce
 in software.
 
+### Wiring
+
+All the connections use the Arduino connector of the board.
+
+| Board pin | MCU pin | Connected to |
+|---|---|---|
+| D3 | PB3 | RGB LED, red leg, through a series resistor |
+| D4 | PB5 | RGB LED, green leg, through a series resistor |
+| D5 | PB8 | RGB LED, blue leg, through a series resistor |
+| 3V3 | - | RGB LED, common (long) leg |
+| A0 | PB1 | light sensor module, signal pin `S` (ADC1 channel 5) |
+| 3V3 | - | light sensor module, middle pin |
+| GND | - | light sensor module, last pin |
+| (on board) | PA1 | button B2, nothing to wire |
+
+Notes:
+
+- The LED is **common anode**: the long leg goes to 3V3, so a colour lights up
+  when its pin is at 0. That is why the overlay uses `GPIO_ACTIVE_LOW`.
+- Each colour has its own series resistor. The value is not critical (a few
+  hundred ohms), it only sets the brightness and protects the LED.
+- The 3V3 and GND of the board are shared between the LED and the sensor with the
+  power rails of the breadboard.
+- Use 3V3, not 5V, for the sensor: the ADC input must not go above 3.3 V.
+
 ### Brightness in percent
 
 The ADC gives a value from 0 to 4095. With our sensor module the value only
